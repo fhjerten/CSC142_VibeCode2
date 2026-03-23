@@ -1,0 +1,1 @@
+Our project is a grocery store simulation where customers move around the store, visit different sections, and then go to checkout. The program visualizes how people shop and how movement and queues work inside a store.
