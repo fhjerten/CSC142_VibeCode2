@@ -15,10 +15,10 @@ Our project is a simple grocery store simulation where customers move around a s
 The movement is intentionally random for now just to get everything working together. The “shaky” movement shows that the system is updating every frame. Later we can make it more realistic (like going to sections or stopping to shop).
 
 # Structure
-- main.py → runs everything  
-- customer.py → customer settings  
-- store.py → store layout  
-- settings.py → constants 
+main.py → runs everything  
+customer.py → customer settings  
+store.py → store layout  
+settings.py → constants 
 
 # Tools used
 Python, pygame
