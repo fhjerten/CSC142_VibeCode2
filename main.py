@@ -1,19 +1,20 @@
 import pygame
-from settings import WIDTH, HEIGHT, WHITE
+from settings import WIDTH, HEIGHT, WHITE, NUM_CUSTOMERS
 from customer import Customer
 from store import Store
 
 pygame.init()
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT)) # game window
-pygame.display.set_caption("Grocery Store Simulation") 
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Grocery Store Simulation")
 
-clock = pygame.time.Clock() # controls game speed in fps
+clock = pygame.time.Clock()
 
-
-#Creating Objects
-customer = Customer()
+# Create the store
 store = Store()
+
+# Create multiple customers
+customers = [Customer(store) for i in range(NUM_CUSTOMERS)]
 
 running = True
 while running:
@@ -21,15 +22,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # update
-    customer.move() # moving customer
+    # update customers so they randomly move around the store.
+    for customer in customers:
+        customer.move()
 
-    #drawing it all
+    # draw everything
     screen.fill(WHITE)
     store.draw(screen)
-    customer.draw(screen)
+
+    for customer in customers:
+        customer.draw(screen)
 
     pygame.display.flip()
-    clock.tick(60) # run the simulation at 60 fps
+    clock.tick(60)
 
 pygame.quit()
