@@ -29,7 +29,6 @@ while running:
     # draw everything
     screen.fill(WHITE)
     store.draw(screen)
-
     for customer in customers:
         customer.draw(screen)
 
@@ -37,3 +36,8 @@ while running:
     clock.tick(60)
 
 pygame.quit()
+
+
+# measurable result (profit)
+# resource system (sections)
+# decisions customers ($)
