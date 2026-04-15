@@ -23,3 +23,21 @@ settings.py → constants
 
 # Tools used
 Python, pygame
+
+
+
+# for ui (next move)
+import pygame
+
+class UI:
+def init(self):
+self.font = pygame.font.SysFont(None, 30)
+
+def draw(self, screen, store, customers):
+    # show profit
+    profit_text = self.font.render("Profit: ?", True, (0,0,0))
+    screen.blit(profit_text, (10, 10))
+
+    # show number of customers
+    customer_text = self.font.render("Customers: ?", True, (0,0,0))
+    screen.blit(customer_text, (10, 40))
