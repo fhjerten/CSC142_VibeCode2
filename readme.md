@@ -4,20 +4,21 @@ Grocery Store Simulation
 By launching it from the file main.py
 
 # Project Idea
-Our project is a simple grocery store simulation where customers move around a store, visit sections, and go toward checkout. Right now it’s an early version, but it shows the basic idea.
+This project is a simple grocery store simulation built using Python and Pygame. The goal is to simulate customers moving around a store, visiting different sections, and behaving like shoppers.
 
 # Features
-- Store layout (fruits, drinks, checkout)
-- One customer moving around
-- A visualisation of a customer moving around in an empty space.
+- Store layout with fruits, drinks, and checkout
+- multiple customers moving around the store at the same time
+- customers move toward different sections, instead of randomly
+- it is a continuous simulation loop.
 
 # Current stage
-The movement is intentionally random for now just to get everything working together. The “shaky” movement shows that the system is updating every frame. Later we can make it more realistic (like going to sections or stopping to shop).
+Right now is it a working prototype of the simulation. All customers do now have basic behaviors, they choose a section, move towards it, stops at it for 1 second, and then continues to go to another section. 
 
 # Structure
-main.py → runs everything  
-customer.py → customer settings  
-store.py → store layout  
+main.py → runs the simulation loop
+customer.py → handles the customer movement and behavior
+store.py → store layout and sections
 settings.py → constants 
 
 # Tools used
