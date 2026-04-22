@@ -1,43 +1,40 @@
-Grocery Store Simulation
+# Grocery Store Simulation
 
-# How to run program
-By launching it from the file main.py
-
-# Project Idea
-This project is a simple grocery store simulation built using Python and Pygame. The goal is to simulate customers moving around a store, visiting different sections, and behaving like shoppers.
-
-# Features
-- Store layout with fruits, drinks, and checkout
-- multiple customers moving around the store at the same time
-- customers move toward different sections, instead of randomly
-- it is a continuous simulation loop.
-
-# Current stage
-Right now is it a working prototype of the simulation. All customers do now have basic behaviors, they choose a section, move towards it, stops at it for 1 second, and then continues to go to another section. 
-
-# Structure
-main.py → runs the simulation loop
-customer.py → handles the customer movement and behavior
-store.py → store layout and sections
-settings.py → constants 
-
-# Tools used
-Python, pygame
+## How to Run
+Run the program by running:
+main.py
 
 
+## Project Idea
+This project simulates a simple grocery store using Python and Pygame.
 
-# for ui (next move)
-import pygame
+Customers move around the store, collect items from different sections, and then go to checkout. Each item has a price, and the store earns profit when customers pay.
 
-class UI:
-def init(self):
-self.font = pygame.font.SysFont(None, 30)
 
-def draw(self, screen, store, customers):
-    # show profit
-    profit_text = self.font.render("Profit: ?", True, (0,0,0))
-    screen.blit(profit_text, (10, 10))
+## What the Program Does
+- Customers move randomly between sections (Fruits and Drinks)
+- Each section has:
+  - A price per item
+  - A limited stock
+- Customers collect items and build up money
+- After collecting enough items, they go to checkout
+- Customers form a line on the left side of the checkout
+- Only one customer at a time moves into the checkout to pay
+- The store tracks total profit at the top of the screen
+- When all items are sold out, the simulation ends.
 
-    # show number of customers
-    customer_text = self.font.render("Customers: ?", True, (0,0,0))
-    screen.blit(customer_text, (10, 40))
+
+## Features
+- Real-time movement using Pygame
+- Queue system (customers wait in line properly)
+- Resource system (limited stock in sections)
+- Profit system for store
+- Display with images (customers and products)
+
+
+## Structure
+- main.py: runs the simulation loop
+- customer.py: handles customer behavior and movement
+- store.py: handles store logic, sections, and profit
+- settings.py: stores constants (screen size, prices)
+- images: contains all images used in the simulation
