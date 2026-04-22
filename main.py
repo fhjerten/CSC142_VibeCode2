@@ -1,5 +1,5 @@
 import pygame
-from settings import WIDTH, HEIGHT, WHITE, NUM_CUSTOMERS
+from settings import WIDTH, HEIGHT, WHITE
 from customer import Customer
 from store import Store
 
@@ -10,11 +10,10 @@ pygame.display.set_caption("Grocery Store Simulation")
 
 clock = pygame.time.Clock()
 
-# Create the store
 store = Store()
 
-# Create multiple customers
-customers = [Customer(store) for i in range(NUM_CUSTOMERS)]
+# always 5 customers
+customers = [Customer(store) for _ in range(5)]
 
 running = True
 while running:
@@ -22,22 +21,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # update customers so they randomly move around the store.
-    for customer in customers:
-        customer.move()
+    # stop when simulation over
+    if not store.all_stock_empty():
+        for c in customers:
+            c.move()
 
-    # draw everything
+        if store.process_checkout():
+            customers.append(Customer(store))
+
+    # draw
     screen.fill(WHITE)
     store.draw(screen)
-    for customer in customers:
-        customer.draw(screen)
+
+    for c in customers:
+        c.draw(screen)
 
     pygame.display.flip()
     clock.tick(60)
 
 pygame.quit()
-
-
-# measurable result (profit)
-# resource system (sections)
-# decisions customers ($)

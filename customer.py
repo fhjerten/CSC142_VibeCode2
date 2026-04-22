@@ -1,55 +1,101 @@
 import pygame
 import random
-from settings import CUSTOMER_SPEED, GREEN
+from settings import CUSTOMER_SPEED, PRICES
 
 class Customer:
     def __init__(self, store):
-        # each customer starts at a random position
+        self.store = store
+
+        # image
+        self.image = pygame.transform.scale(
+            pygame.image.load("images/customer.png"), (20, 20))
+
+        self.reset()
+
+    def reset(self):
+        # start position
         self.x = random.randint(0, 800)
         self.y = random.randint(0, 600)
 
-        self.radius = 8
+        self.money = 0
+        self.items = 0
 
-        self.store = store
-        self.target = self.pick_target()  # where customer wants to go 
+        self.target_name, self.target, self.section = self.pick_target()
 
-        self.state = "moving"  # "moving" or "shopping"
-        self.timer = 0  # used when shopping
+        self.state = "moving"
+        self.timer = 0
 
     def pick_target(self):
-        # choose a random section rectangle to go to.
-        return random.choice(self.store.sections)[1]
+        section = random.choice(self.store.sections[:2])
+        return section[0], section[1], section
 
     def move(self):
         if self.state == "moving":
-            # move toward center of intended rectangle
-            target_x = self.target.centerx
-            target_y = self.target.centery
+            tx, ty = self.target.centerx, self.target.centery
 
-            # move left/right
-            if self.x < target_x:
-                self.x += CUSTOMER_SPEED
-            elif self.x > target_x:
-                self.x -= CUSTOMER_SPEED
+            # smooth move
+            self.x += (tx - self.x) * 0.015
+            self.y += (ty - self.y) * 0.015
 
-            # move up/down
-            if self.y < target_y:
-                self.y += CUSTOMER_SPEED
-            elif self.y > target_y:
-                self.y -= CUSTOMER_SPEED
-
-            # check if close enough to "arrived"
-            if abs(self.x - target_x) < 5 and abs(self.y - target_y) < 5:
+            if abs(self.x - tx) < 5 and abs(self.y - ty) < 5:
                 self.state = "shopping"
-                self.timer = 60  # customer stays at a section for 1 second = 60 frames (60 fps)
+                self.timer = 60
 
         elif self.state == "shopping":
             self.timer -= 1
 
-            # when customer is done at a section, go to new target
             if self.timer <= 0:
-                self.target = self.pick_target()
-                self.state = "moving"
+                # take item
+                if self.section[2] > 0:
+                    self.money += PRICES[self.target_name]
+                    self.section[2] -= 1
+                    self.items += 1
+
+                # go checkout after 2 items
+                if self.items >= 2:
+                    self.state = "going_to_line"
+                else:
+                    self.target_name, self.target, self.section = self.pick_target()
+                    self.state = "moving"
+
+        elif self.state == "going_to_line":
+            checkout = self.store.sections[2][1]
+
+            tx = checkout.x - 30
+            ty = checkout.y
+
+            self.x += (tx - self.x) * 0.03
+            self.y += (ty - self.y) * 0.03
+
+            # join line once
+            if abs(self.x - tx) < 5 and self not in self.store.line:
+                self.store.add_to_line(self)
+                self.state = "in_line"
+                self.timer = 120
+
+        elif self.state == "in_line":
+            if self not in self.store.line:
+                return
+
+            index = self.store.line.index(self)
+            checkout = self.store.sections[2][1]
+
+            # first goes inside checkout
+            if index == 0:
+                tx = checkout.centerx
+                ty = checkout.centery
+            else:
+                tx = checkout.x - 30
+                ty = checkout.y + index * 25
+
+            # move into position
+            self.x += (tx - self.x) * 0.1
+            self.y += (ty - self.y) * 0.1
 
     def draw(self, screen):
-        pygame.draw.circle(screen, GREEN, (self.x, self.y), self.radius)
+        screen.blit(self.image, (self.x, self.y))
+
+        # money above
+        font = pygame.font.SysFont(None, 20)
+        screen.blit(font.render(f"${self.money}", True, (0, 0, 0)),
+                    (self.x - 5, self.y - 15))
